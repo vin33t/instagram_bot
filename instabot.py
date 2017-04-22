@@ -81,3 +81,27 @@ def get_users_recent_posts(username):
 
     else:
         print('\nStatus code other than 200 was received!\n')
+
+def select_post():
+    # global variable can be used in any of the functions
+    global post_id
+    get_users_recent_posts(instagram_username)
+    post_id = input("\nEnter the post id you want to select\n")
+
+
+# Function to like the any instagram post by id
+def like_post_for_user(username):
+    get_users_recent_posts(username)
+    select_post()
+
+    payload = {'access_token': ACCESS_TOKEN}
+    request_url = (BASE_URL + 'media/%s/likes') % post_id
+
+    response_to_like = requests.post(request_url, payload).json()
+
+    print(response_to_like)
+
+    if response_to_like['meta']['code'] == 200:
+        print('\nLiked Successfully\n')
+    else:
+        print('\nPlease try again!\n')
