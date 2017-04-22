@@ -171,3 +171,53 @@ def average_number_of_words_in_comment(username):
     for comment in comments['data']:
         print(comment['text'].split())
         print("Number of words in the comment = %s\n" % (len(comment['text'].split())))
+
+# function to delete a comment by post id and comment id
+def delete_a_comment(username):
+    select_post()
+    get_comment_id_for_a_post(username)
+    comment_id = input("Enter the comment id you want to delete\n")
+    # takes input from the user for comment id to be deleted
+
+    request_url = (BASE_URL + 'media/%s/comments/%s?access_token=%s') % (post_id, comment_id, ACCESS_TOKEN)
+
+    print('\nREQUESTING DELETING COMMENTS FROM INSTAGRAM USING %s\n' % request_url)
+
+    request = requests.delete(request_url)
+
+    print(request)
+
+    if request['meta']['code'] == 200:
+        print('\nComment deleted successfully\n')
+
+    else:
+        print('\nTry again...........!!!!\n')
+
+
+# conditions to call the function based upon the choice input from the user
+if make_a_choice == "1":
+    print(get_user_id_by_username(instagram_username))
+
+elif make_a_choice == "2":
+    get_users_recent_posts(instagram_username)
+
+elif make_a_choice == "3":
+    like_post_for_user(instagram_username)
+
+elif make_a_choice == "4":
+    get_comment_id_for_a_post(instagram_username)
+
+elif make_a_choice == "5":
+    post_a_new_comment(instagram_username)
+
+elif make_a_choice == "6":
+    get_a_comment_by_word(instagram_username)
+
+elif make_a_choice == "7":
+    average_number_of_words_in_comment(instagram_username)
+
+elif make_a_choice == "8":
+    delete_a_comment(instagram_username)
+
+else:
+    print("Select a suitable option.....................!!!!!!!!")
