@@ -141,3 +141,33 @@ def post_a_new_comment(username):
 
     else:
         print("\nPlease try again!\n")
+# function to print all the comments containing a specific word
+
+def get_a_comment_by_word(username):
+    searched = input('Enter the text to search in comments : ')
+    post_id = get_users_recent_posts(username)
+
+    request_url = (BASE_URL + 'media/%s/comments?access_token=%s') % (post_id, ACCESS_TOKEN)
+
+    print('\nREQUESTING COMMENTS FROM INSTAGRAM USING %s\n' % request_url)
+    global comments
+    # global variable can be used in any of the functions
+
+    comments = requests.get(request_url).json()
+
+    for comment in comments['data']:
+        if searched in comment['text']:
+            print('%s commented: %s' % (comment['from']['username'], comment['text']))
+            print(comment['id'])
+            print('\n')
+        else:
+            print('Comment not found')
+
+
+# Prints the number of words of every comment of the post
+def average_number_of_words_in_comment(username):
+    get_comment_id_for_a_post(username)
+
+    for comment in comments['data']:
+        print(comment['text'].split())
+        print("Number of words in the comment = %s\n" % (len(comment['text'].split())))
