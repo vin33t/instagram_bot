@@ -105,3 +105,39 @@ def like_post_for_user(username):
         print('\nLiked Successfully\n')
     else:
         print('\nPlease try again!\n')
+def get_comment_id_for_a_post(username):
+    post_id = get_users_recent_posts(username)
+
+    request_url = (BASE_URL + 'media/%s/comments?access_token=%s') % (post_id, ACCESS_TOKEN)
+
+    print('\nREQUESTING COMMENTS FROM INSTAGRAM USING %s\n' % request_url)
+
+    global comments
+    # global variable can be used in any of the functions
+
+    comments = requests.get(request_url).json()
+
+    for comment in comments['data']:
+        print('%s commented: %s' % (comment['from']['username'], comment['text']))
+        print(comment['id'])
+        print('\n')
+
+
+# Function to post a new comment on any post
+def post_a_new_comment(username):
+    write_a_comment = input("Enter the comment you want to post.\n")
+    get_users_recent_posts(username)
+    select_post()
+    request_url = (BASE_URL + 'media/%s/comments') % post_id
+
+    request_data = {'access_token': ACCESS_TOKEN, 'text': '%s' % write_a_comment}
+
+    comment_request = requests.post(request_url, request_data).json()
+
+    print(comment_request)
+
+    if comment_request['meta']['code'] == 200:
+        print("\nComment posted\n")
+
+    else:
+        print("\nPlease try again!\n")
